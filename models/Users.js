@@ -10,8 +10,10 @@ const User = db.define('user', {
     },
     password: {
         type: Sequelize.STRING
+    },
+    userLevel: {
+        type: Sequelize.NUMBER
     }
-
 })
 
 module.exports = User;
