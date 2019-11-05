@@ -15,7 +15,7 @@ initializePassport(
 );
 
 //temp users file
-const users = []
+const users = [{email:'w@w', password: 'incorrect', name:'testname'}]
 
 //since the app.js app.use function is already pointing to /users, all routes below will assume url/users is prepended.
 router.get('/', (req, res) => res.send("THIS IS THE USERS PAGE"))
@@ -47,13 +47,13 @@ router.post('/register', authenticate.checkNotAuthenticated, async (req, res) =>
         console.log(users)
         res.redirect('/users/login')
     } catch (error) {
-        res.render("/users/register")
+        res.render('/users/register')
     }
 })
 
 router.delete('/logout', (req, res) => {
     req.logOut()
-    res.redirect('/login')
+    res.redirect('/users/login')
 })
 
 module.exports = router;

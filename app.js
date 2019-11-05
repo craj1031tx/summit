@@ -40,56 +40,9 @@ app.use(methodOverride('_method')) //this middleware allows for using HTTP verbs
 //Express Router files
 app.use('/users', require('./routes/users'));
 
-//placeholder users field for synthetic database
-const users =[]
-
-//require passport configuation and perform checks (reconfigure during database integration?)
-const initializePassport = require('./config/passport-config')
-initializePassport(
-    passport, 
-    email => users.find(user => user.email === email),
-    id => users.find(user => user.id === id)   
-);
-
 app.get('/', authenticate.checkAuthenticated, (req, res) => {
     res.render('index.ejs', { name: req.user.name });
 })
-
-// app.get('/login', authenticate.checkNotAuthenticated, (req, res) => {
-//     res.render('login.ejs');
-// })
-
-// app.post('/login', authenticate.checkNotAuthenticated, passport.authenticate('local', {
-//     successRedirect: '/',
-//     failureRedirect: '/login',
-//     failureFlash: true
-// }))
-
-
-// app.get('/register', authenticate.checkNotAuthenticated, (req, res) => {
-//     res.render('register.ejs');
-// })
-
-// app.post('/register', authenticate.checkNotAuthenticated, async (req, res) => {
-//     try {
-//         const hashedPassword = await bcrypt.hash(req.body.password, 10)
-//         users.push({
-//             id: Date.now().toString(),
-//             name: req.body.name,
-//             email: req.body.email,
-//             password: hashedPassword
-//         })
-//         console.log(users)
-//         res.redirect('/login')
-//     } catch (error) {
-//         res.render("/register")
-//     }
-// })
-
-// app.delete('/logout', (req, res) => {
-//     req.logOut()
-//     res.redirect('/login')
-// })
 
 
 app.listen(3000)
