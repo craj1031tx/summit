@@ -1,3 +1,4 @@
+//only run dotenv when outside of production environment
 if (process.env.NODE_ENV !== 'proudction'){
     require('dotenv').config();
 }
@@ -9,6 +10,14 @@ const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
 const methodOverride = require('method-override')
+const path = require('path')
+
+
+//DB connection setup from config file + connect to db
+const db = require('./config/database')
+db.authenticate()
+    .then(() => console.log("Database connected..."))
+    .catch(err => console.log("Error: " + err))
 
 //express startup
 const app = express()
