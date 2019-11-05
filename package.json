@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "devStart": "nodemon app.js",
-    "runproduction": "node app.js"
+    "productionStart": "node app.js"
   },
   "author": "Chetan Raj",
   "license": "MIT",
@@ -15,6 +15,9 @@
     "dotenv": "^8.2.0",
     "ejs": "^2.7.1",
     "express": "^4.17.1",
+    "express-flash": "0.0.2",
+    "express-session": "^1.17.0",
+    "method-override": "^3.0.0",
     "nodemon": "^1.19.4",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0"
