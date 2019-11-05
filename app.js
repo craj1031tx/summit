@@ -13,6 +13,10 @@ const methodOverride = require('method-override')
 const path = require('path')
 
 
+//authentication functions import. move to all routing files later?
+const authenticate = require('./config/authenticate')
+
+
 //DB connection setup from config file + connect to db
 const db = require('./config/database')
 db.authenticate()
@@ -40,70 +44,52 @@ app.use('/users', require('./routes/users'));
 const users =[]
 
 //require passport configuation and perform checks (reconfigure during database integration?)
-const initializePassport = require('./passport-config')
+const initializePassport = require('./config/passport-config')
 initializePassport(
     passport, 
     email => users.find(user => user.email === email),
     id => users.find(user => user.id === id)   
 );
 
-app.get('/', checkAuthenticated, (req, res) => {
+app.get('/', authenticate.checkAuthenticated, (req, res) => {
     res.render('index.ejs', { name: req.user.name });
 })
 
-app.get('/login', checkNotAuthenticated, (req, res) => {
-    res.render('login.ejs');
-})
+// app.get('/login', authenticate.checkNotAuthenticated, (req, res) => {
+//     res.render('login.ejs');
+// })
 
-app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: true
-}))
-
-
-app.get('/register', checkNotAuthenticated, (req, res) => {
-    res.render('register.ejs');
-})
-
-app.post('/register', checkNotAuthenticated, async (req, res) => {
-    try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10)
-        users.push({
-            id: Date.now().toString(),
-            name: req.body.name,
-            email: req.body.email,
-            password: hashedPassword
-        })
-        console.log(users)
-        res.redirect('/login')
-    } catch (error) {
-        res.render("/register")
-    }
-})
-
-app.delete('/logout', (req, res) => {
-    req.logOut()
-    res.redirect('/login')
-})
+// app.post('/login', authenticate.checkNotAuthenticated, passport.authenticate('local', {
+//     successRedirect: '/',
+//     failureRedirect: '/login',
+//     failureFlash: true
+// }))
 
 
-//check user authentication. if authenticated, then proceed to next function. if not, then redirect to login.
-function checkAuthenticated(req, res, next){
-    if (req.isAuthenticated()) {
-        return next()
-    } 
+// app.get('/register', authenticate.checkNotAuthenticated, (req, res) => {
+//     res.render('register.ejs');
+// })
 
-    res.redirect('/login')
-}
+// app.post('/register', authenticate.checkNotAuthenticated, async (req, res) => {
+//     try {
+//         const hashedPassword = await bcrypt.hash(req.body.password, 10)
+//         users.push({
+//             id: Date.now().toString(),
+//             name: req.body.name,
+//             email: req.body.email,
+//             password: hashedPassword
+//         })
+//         console.log(users)
+//         res.redirect('/login')
+//     } catch (error) {
+//         res.render("/register")
+//     }
+// })
 
-//check if a user isn't authenticated. if they are already registered, they shouldn't be able to see some screens (such as login and register screens), so take them back to the homepage.
-function checkNotAuthenticated(req, res, next){
-    if (req.isAuthenticated()) {
-        return res.redirect('/')
-    }
-    next()
-}
+// app.delete('/logout', (req, res) => {
+//     req.logOut()
+//     res.redirect('/login')
+// })
 
 
 app.listen(3000)
