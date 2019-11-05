@@ -33,6 +33,9 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method')) //this middleware allows for using HTTP verbs like DELETE
 
+//Express Router files
+app.use('/users', require('./routes/users'));
+
 //placeholder users field for synthetic database
 const users =[]
 
@@ -83,6 +86,7 @@ app.delete('/logout', (req, res) => {
     req.logOut()
     res.redirect('/login')
 })
+
 
 //check user authentication. if authenticated, then proceed to next function. if not, then redirect to login.
 function checkAuthenticated(req, res, next){
