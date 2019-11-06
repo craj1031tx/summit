@@ -12,7 +12,8 @@ const methodOverride = require('method-override')
 const path = require('path')
 const exphbs = require('express-handlebars')
 
-
+//importing and invoking passport middleware passport
+require('./config/passport-config')(passport)
 //authentication functions import. move to all routing files later?
 const auth = require('./config/authenticate')
 
@@ -29,14 +30,17 @@ app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars')
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(flash())
+app.use(methodOverride('_method')) //this middleware allows for using HTTP verbs like DELETE
 app.use(session({
     secret: process.env.SESSION_SECRET,
-    resave: false,
+    resave: false,                  //check if this should be true or false, traversy set it to true. same for saveUninitialized below. 
     saveUninitialized: false
 }))
+
+//Passport Middleware
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(methodOverride('_method')) //this middleware allows for using HTTP verbs like DELETE
+
 
 //Express Router files
 app.use('/users', require('./routes/users'));

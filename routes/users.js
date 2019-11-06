@@ -1,21 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const db = require('../config/database')
 const User = require('../models/Users')
 const passport = require('passport')
 const auth = require('../config/authenticate')
 const bcrypt = require('bcrypt')
 
-const initializePassport = require('../config/passport-config')
-
-initializePassport(
-    passport, 
-    email => users.find(user => user.email === email),
-    id => users.find(user => user.id === id)   
-);
-
-//temp users file
-const users = []
 
 //since the app.js app.use function is already pointing to /users, all routes below will assume url/users is prepended.
 router.get('/', (req, res) => {
@@ -28,12 +17,13 @@ router.get('/login', auth.alreadyAuth, (req, res) => {
     res.render('login');
 })
 
-router.post('/login', auth.alreadyAuth, passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/users/login',
-    failureFlash: true
-}))
-
+router.post('/login', (req, res, next) => {
+    passport.authenticate('local', {
+        successRedirect: '/users',
+        failureRedirect: '/users/login',
+        failureFlash: true
+    })(req, res, next)
+})
 
 router.get('/register', auth.alreadyAuth, (req, res) => {
     res.render('register');
@@ -42,14 +32,16 @@ router.get('/register', auth.alreadyAuth, (req, res) => {
 router.post('/register', auth.alreadyAuth, async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
-        users.push({
-            id: Date.now().toString(),
-            name: req.body.name,
+        User.create({
             email: req.body.email,
-            password: hashedPassword
+            name: req.body.name,
+            password: hashedPassword,
+            userLevel: 1
         })
-        console.log(users)
-        res.redirect('/users/login')
+        .then((newUser) => {
+            console.log("here is the new user: " + JSON.stringify(newUser, null, 4)) //remove console.log for production
+            res.redirect('/users/')}
+        )
     } catch (error) {
         res.render('/users/register')
     }
@@ -58,6 +50,22 @@ router.post('/register', auth.alreadyAuth, async (req, res) => {
 router.delete('/logout', (req, res) => {
     req.logOut()
     res.redirect('/users/login')
+})
+
+
+//test user route to print out random database information...
+router.get('/test', (req, res) => {
+    User.findAll({
+        limit: 1,
+        where: {
+            email: "f@f.com"
+        }
+    })
+    .then(
+        singleUser => {
+            console.log("here is the single user: " + JSON.stringify(singleUser))
+            res.send(singleUser[0])
+        })
 })
 
 
