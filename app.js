@@ -14,7 +14,7 @@ const path = require('path')
 
 
 //authentication functions import. move to all routing files later?
-const authenticate = require('./config/authenticate')
+const auth = require('./config/authenticate')
 
 
 //DB connection setup from config file + connect to db
@@ -40,7 +40,7 @@ app.use(methodOverride('_method')) //this middleware allows for using HTTP verbs
 //Express Router files
 app.use('/users', require('./routes/users'));
 
-app.get('/', authenticate.checkAuthenticated, (req, res) => {
+app.get('/', auth.isAuth, (req, res) => {
     res.render('index.ejs', { name: req.user.name });
 })
 

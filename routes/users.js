@@ -3,7 +3,7 @@ const router = express.Router()
 const db = require('../config/database')
 const User = require('../models/Users')
 const passport = require('passport')
-const authenticate = require('../config/authenticate')
+const auth = require('../config/authenticate')
 const bcrypt = require('bcrypt')
 
 const initializePassport = require('../config/passport-config')
@@ -15,27 +15,27 @@ initializePassport(
 );
 
 //temp users file
-const users = [{email:'w@w', password: 'incorrect', name:'testname'}]
+const users = []
 
 //since the app.js app.use function is already pointing to /users, all routes below will assume url/users is prepended.
 router.get('/', (req, res) => res.send("THIS IS THE USERS PAGE"))
 
-router.get('/login', authenticate.checkNotAuthenticated, (req, res) => {
+router.get('/login', auth.alreadyAuth, (req, res) => {
     res.render('login.ejs');
 })
 
-router.post('/login', authenticate.checkNotAuthenticated, passport.authenticate('local', {
+router.post('/login', auth.alreadyAuth, passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/users/login',
     failureFlash: true
 }))
 
 
-router.get('/register', authenticate.checkNotAuthenticated, (req, res) => {
+router.get('/register', auth.alreadyAuth, (req, res) => {
     res.render('register.ejs');
 })
 
-router.post('/register', authenticate.checkNotAuthenticated, async (req, res) => {
+router.post('/register', auth.alreadyAuth, async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
         users.push({

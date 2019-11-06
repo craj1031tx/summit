@@ -12,7 +12,7 @@ const User = db.define('user', {
         type: Sequelize.STRING
     },
     userLevel: {
-        type: Sequelize.NUMBER
+        type: Sequelize.INTEGER
     }
 })
 
