@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/login', auth.alreadyAuth, (req, res) => {
-    res.render('login.ejs');
+    res.render('login');
 })
 
 router.post('/login', auth.alreadyAuth, passport.authenticate('local', {
@@ -36,7 +36,7 @@ router.post('/login', auth.alreadyAuth, passport.authenticate('local', {
 
 
 router.get('/register', auth.alreadyAuth, (req, res) => {
-    res.render('register.ejs');
+    res.render('register');
 })
 
 router.post('/register', auth.alreadyAuth, async (req, res) => {

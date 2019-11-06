@@ -1,7 +1,8 @@
 <h1>Login</h1>
-<% if (messages.error) { %>
-    <%= messages.error %>
-<% } %>
+
+{{#if messages.error}}
+    <h4>{{messages.error}}</h4>
+{{/if}}
 
 <form action="/users/login" method="POST">
     <div>

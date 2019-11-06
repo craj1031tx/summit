@@ -11,6 +11,7 @@ const flash = require('express-flash')
 const session = require('express-session')
 const methodOverride = require('method-override')
 const path = require('path')
+const exphbs = require('express-handlebars')
 
 
 //authentication functions import. move to all routing files later?
@@ -25,7 +26,8 @@ db.authenticate()
 
 //express startup
 const app = express()
-app.set('view-engine', 'ejs')
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars')
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(flash())
 app.use(session({
@@ -41,7 +43,7 @@ app.use(methodOverride('_method')) //this middleware allows for using HTTP verbs
 app.use('/users', require('./routes/users'));
 
 app.get('/', auth.isAuth, (req, res) => {
-    res.render('index.ejs', { name: req.user.name });
+    res.render('index', { name: req.user.name });
 })
 
 //TESTING DATABASE QUERYING - NEED TO DELETE ONCE IT WORKS
