@@ -4,7 +4,6 @@ if (process.env.NODE_ENV !== 'proudction'){
 }
 
 const express = require('express')
-const bcrypt = require('bcrypt')
 const bodyParser = require('body-parser')
 const passport = require('passport')
 const flash = require('express-flash')
@@ -46,12 +45,6 @@ app.get('/', auth.isAuth, (req, res) => {
     res.render('index', { name: req.user.name });
 })
 
-//TESTING DATABASE QUERYING - NEED TO DELETE ONCE IT WORKS
-
-
-app.get('/testroute', (req, res) => {
-
-})
 
 
 app.listen(3000)

@@ -60,4 +60,5 @@ router.delete('/logout', (req, res) => {
     res.redirect('/users/login')
 })
 
+
 module.exports = router;
