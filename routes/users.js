@@ -18,7 +18,11 @@ initializePassport(
 const users = []
 
 //since the app.js app.use function is already pointing to /users, all routes below will assume url/users is prepended.
-router.get('/', (req, res) => res.send("THIS IS THE USERS PAGE"))
+router.get('/', (req, res) => {
+    User.findAll().then(users => {
+        res.send(users);
+      });
+})
 
 router.get('/login', auth.alreadyAuth, (req, res) => {
     res.render('login.ejs');

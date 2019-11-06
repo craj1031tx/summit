@@ -44,5 +44,12 @@ app.get('/', auth.isAuth, (req, res) => {
     res.render('index.ejs', { name: req.user.name });
 })
 
+//TESTING DATABASE QUERYING - NEED TO DELETE ONCE IT WORKS
+
+
+app.get('/testroute', (req, res) => {
+
+})
+
 
 app.listen(3000)
