@@ -7,9 +7,10 @@ const bcrypt = require('bcrypt')
 
 
 //since the app.js app.use function is already pointing to /users, all routes below will assume url/users is prepended.
+//this route is currently set up for testing and does not have any authentication
 router.get('/', (req, res) => {
     User.findAll().then(users => {
-        res.send(users);
+        res.render('userList', {users: users});
       });
 })
 

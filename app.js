@@ -26,8 +26,9 @@ db.authenticate()
 
 //express startup
 const app = express()
-app.engine('handlebars', exphbs());
+app.engine('handlebars', exphbs( {defaultLayout: 'main'}));
 app.set('view engine', 'handlebars')
+app.use(express.static(path.join(__dirname, "public")))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(flash())
 app.use(methodOverride('_method')) //this middleware allows for using HTTP verbs like DELETE
@@ -45,8 +46,8 @@ app.use(passport.session())
 //Express Router files
 app.use('/users', require('./routes/users'));
 
-app.get('/', auth.isAuth, (req, res) => {
-    res.render('index', { name: req.user.name });
+app.get('/', (req, res) => {
+    res.render('index', { layout: 'landing'});
 })
 
 
