@@ -1,12 +1,12 @@
 module.exports = (sequelize, Datatypes) => {
-    const Category = sequelize.define('cateogry', {
+    const Category = sequelize.define('category', {
         name: {
             type:Datatypes.STRING
         },
         imageMimeType: {
             type:Datatypes.STRING   //save file type extension for the image
         },
-        imagePath: {
+        imageMulterName: {
             type: Datatypes.TEXT    //the image path on the server
         },
         imageOriginalName: {

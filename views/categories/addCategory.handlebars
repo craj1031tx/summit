@@ -1,0 +1,14 @@
+<h1>Add a Category</h1>
+<form action="/categories/addcategory" method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" placeholder="Name" name="name">
+    </div>
+    <div class="form-group">
+        <label for="name">Image (Suggested: height by width)</label>
+        <input type="file" class="form-control" id="categoryImage" name="categoryImage">
+    </div>
+    <button type="submit" class="btn btn-primary">Add Category</button>
+</form>
+
+

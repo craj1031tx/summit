@@ -1,0 +1,12 @@
+<div class="card-deck">
+{{#each products}}
+<div class="card" style="width: 20rem;">
+  <img src="/uploads/{{imageMulterName}}" class="card-img-top" alt="image for the category {{name}}" height="300">
+  <div class="card-body">
+    <h5 class="card-title">{{name}}</h5>
+    <p class="card-text">{{shortDescription}}</p>
+    <a href="/products/{{id}}" class="btn btn-primary">View Assets</a>
+  </div>
+</div>
+{{/each}}
+</div>

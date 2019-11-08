@@ -9,7 +9,7 @@ const Models = require('../config/database')
 //this route is currently set up for testing and does not have any authentication
 router.get('/', (req, res) => {
     Models.User.findAll().then(users => {
-        res.render('users/userList', {users: users});
+        res.render('users/allUsers', {users: users});
       });
 })
 

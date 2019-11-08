@@ -50,8 +50,9 @@ app.get('/', (req, res) => {
     res.render('index', { layout: 'landing'});
 })
 
-db.sequelize.sync({force: true}).then(() => {
-    app.listen(process.env.PORT)
-}) 
+// db.sequelize.sync({force: false}).then(() => {
+//     app.listen(process.env.PORT)
+// }) 
 
+db.selectiveSync(app.listen(process.env.PORT, () => console.log('now listening on: ' + process.env.PORT)))
 

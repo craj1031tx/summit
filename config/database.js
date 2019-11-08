@@ -30,7 +30,23 @@ Object.keys(models).forEach((modelName) =>{
   }
 })
 
+// Object.keys(models).forEach((modelName) =>{
+//   if('syncNow' in models[modelName]) {
+//     console.log('SYNCING THE FOLLOWING MODEL: ', models)
+//     models[modelName].associate(models)
+//   }
+// })
+
 models.sequelize = sequelize
 models.Sequelize = Sequelize
+
+
+//selective syncing for development. when switching to migrations, remove this...
+//select the Model to run the sync on and then set the force setting to true. 
+models.selectiveSync = (cb) => {
+  models.Category.sync({force: false})
+  models.Product.sync({force: false})
+  return cb
+}
 
 module.exports = models
