@@ -27,5 +27,9 @@ module.exports = (sequelize, Datatypes) => {
         }
     })
 
+    Asset.associate = (models) => {
+        Asset.belongsTo(models.Product)
+    }
+
     return Asset;
 }
