@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const multer = require('multer')
-const Product = require('../models/Products')
+const Models = require('../config/database')
 const auth = require('../config/authenticate')
 const mime = require('mime-types')      //converts stored mime type extensions from multer into file extensions. 
 const crypto = require('crypto')
@@ -29,7 +29,7 @@ router.get('/addproduct', (req, res) => res.render('products/addproduct'))
 router.get('/testupload', (req, res) => res.render('products/producttest'))
 
 router.post('/testupload', upload.single('avatar'), (req, res, next) => {
-    Product.create({
+    Models.Product.create({
         imageOriginalName: req.file.originalname,
         imageMimeType: req.file.mimetype,
         imageMulterName: req.file.filename
@@ -41,9 +41,12 @@ router.post('/testupload', upload.single('avatar'), (req, res, next) => {
 })
 
 router.get('/readupload', (req, res) => {
-    Product.findAll({})
+    Models.Product.findAll({})
         .then(result => {
-            res.render('products/productreadupload', {filename: result[0].imageMulterName})
+            if(result.length){
+              return res.render('products/productreadupload', {filename: result[0].imageMulterName})
+            }
+            res.sendStatus(200)
         })
 })
 

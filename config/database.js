@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 //database connection, using sequelize and postgrest. pool size may need to be modified for production
-module.exports = new Sequelize('summit', 'postgres', process.env.POSTGRES_PASSWORD, {
+const sequelize = new Sequelize('summit', 'postgres', process.env.POSTGRES_PASSWORD, {
   host: 'localhost',
   dialect: 'postgres',
   pool: { 
@@ -11,3 +11,22 @@ module.exports = new Sequelize('summit', 'postgres', process.env.POSTGRES_PASSWO
     idle: 10000
   }
 });
+
+sequelize.authenticate()
+    .then(() => console.log("Database connected..."))
+    .catch(err => console.log("Error: " + err))
+
+const models = {
+  User: sequelize.import('../models/Users'),
+  Category: sequelize.import('../models/Categories'),
+  Product: sequelize.import('../models/Products'),
+  Asset: sequelize.import('../models/Assets'),
+}
+
+Object.keys(models).forEach((modelName) =>{
+  if('associate' in models[modelName]) {
+    models[modelName].associate(models)
+  }
+})
+
+module.exports = models

@@ -1,5 +1,5 @@
 const LocalStrategy = require('passport-local').Strategy
-const User = require('../models/Users')
+const Models = require('../config/database')
 const bcrypt = require('bcrypt')
 
 
@@ -8,7 +8,7 @@ module.exports = function(passport) {
         new LocalStrategy({ usernameField: 'email'}, (email, password, done) => {
             console.log("the passed email is: ", email)
             //Match User
-            User.findAll({
+            Models.User.findAll({
                 limit: 1,
                 where: {
                     email: email
@@ -39,7 +39,7 @@ module.exports = function(passport) {
     })
 
     passport.deserializeUser((id, done) => {
-        User.findAll({
+        Models.User.findAll({
             limit: 1,
             where: { id: id }
         })

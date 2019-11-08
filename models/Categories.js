@@ -1,25 +1,18 @@
-const Sequelize = require('sequelize')
-const db = require('../config/database')
-const Product = require('./Products')
+module.exports = (sequelize, Datatypes) => {
+    const Category = sequelize.define('cateogry', {
+        name: {
+            type:Datatypes.STRING
+        },
+        imageMimeType: {
+            type:Datatypes.STRING   //save file type extension for the image
+        },
+        imagePath: {
+            type: Datatypes.TEXT    //the image path on the server
+        },
+        imageOriginalName: {
+            type: Datatypes.TEXT    //the original file name of the image since Multer stores it as a random file name
+        }
+    })
 
-const Category = db.define('category', {
-    name: {
-        type:Sequelize.STRING
-    },
-    imageMimeType: {
-        type:Sequelize.STRING   //save file type extension for the image
-    },
-    imagePath: {
-        type: Sequelize.TEXT    //the image path on the server
-    },
-    imageOriginalName: {
-        type: Sequelize.TEXT    //the original file name of the image since Multer stores it as a random file name
-    }
-})
-
-// Category.hasMany(Product)
-
-Category.sync({ force: true })
-
-
-module.exports = Category;
+    return Category;
+}

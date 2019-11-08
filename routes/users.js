@@ -1,15 +1,14 @@
 const express = require('express')
 const router = express.Router()
-const User = require('../models/Users')
 const passport = require('passport')
 const auth = require('../config/authenticate')
 const bcrypt = require('bcrypt')
-
+const Models = require('../config/database')
 
 //since the app.js app.use function is already pointing to /users, all routes below will assume url/users is prepended.
 //this route is currently set up for testing and does not have any authentication
 router.get('/', (req, res) => {
-    User.findAll().then(users => {
+    Models.User.findAll().then(users => {
         res.render('users/userList', {users: users});
       });
 })
@@ -33,7 +32,7 @@ router.get('/register', auth.alreadyAuth, (req, res) => {
 router.post('/register', auth.alreadyAuth, async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
-        User.create({
+        Models.User.create({
             email: req.body.email,
             name: req.body.name,
             password: hashedPassword,
@@ -56,7 +55,7 @@ router.delete('/logout', (req, res) => {
 
 //test user route to print out random database information...
 router.get('/test', (req, res) => {
-    User.findAll({
+    Model.User.findAll({
         limit: 1,
         where: {
             email: "f@f.com"

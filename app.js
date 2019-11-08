@@ -20,9 +20,7 @@ const auth = require('./config/authenticate')
 
 //DB connection setup from config file + connect to db
 const db = require('./config/database')
-db.authenticate()
-    .then(() => console.log("Database connected..."))
-    .catch(err => console.log("Error: " + err))
+
 
 //express startup
 const app = express()
