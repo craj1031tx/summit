@@ -1,0 +1,23 @@
+<h1>List of Assets</h1>
+<table class="table">
+  <thead>
+    <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Content Type</th>
+        <th scope="col">privLevel</th>
+        <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each assets}}  
+    <tr>
+        <td>{{name}}</td>
+        <td>{{contentType}}</td>
+        <td>{{privLevel}}</td>
+        <td>
+            <a class="btn btn-success" href="/uploads/{{assetMulterName}}" download="{{assetOriginalName}}">Download</a>
+        <td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>

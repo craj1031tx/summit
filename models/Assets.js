@@ -3,7 +3,7 @@ module.exports = (sequelize, Datatypes) => {
         name: {
             type: Datatypes.STRING       
         },
-        conteType: {
+        contentType: {
             type: Datatypes.STRING
         },
         privLevel: {
