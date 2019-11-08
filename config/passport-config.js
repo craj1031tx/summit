@@ -39,13 +39,11 @@ module.exports = function(passport) {
     })
 
     passport.deserializeUser((id, done) => {
-        console.log('the user id to deserialize is: ' + id)
         User.findAll({
             limit: 1,
             where: { id: id }
         })
             .then(user => {
-                console.log('the deserialized user is: ' + JSON.stringify(user[0], null, 4))
                 done(null, user[0])
             })
             .error(err => done(err, null))

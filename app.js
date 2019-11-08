@@ -42,9 +42,11 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-
 //Express Router files
-app.use('/users', require('./routes/users'));
+app.use('/users', require('./routes/users'))
+app.use('/products', require('./routes/products'))
+app.use('/assets', require('./routes/assets'))
+app.use('/categories', require('./routes/categories'))
 
 app.get('/', (req, res) => {
     res.render('index', { layout: 'landing'});

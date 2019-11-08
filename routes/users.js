@@ -10,12 +10,12 @@ const bcrypt = require('bcrypt')
 //this route is currently set up for testing and does not have any authentication
 router.get('/', (req, res) => {
     User.findAll().then(users => {
-        res.render('userList', {users: users});
+        res.render('users/userList', {users: users});
       });
 })
 
 router.get('/login', auth.alreadyAuth, (req, res) => {
-    res.render('login');
+    res.render('users/login', { layout: 'landing'});
 })
 
 router.post('/login', (req, res, next) => {
@@ -27,7 +27,7 @@ router.post('/login', (req, res, next) => {
 })
 
 router.get('/register', auth.alreadyAuth, (req, res) => {
-    res.render('register');
+    res.render('users/register', { layout: 'landing'});
 })
 
 router.post('/register', auth.alreadyAuth, async (req, res) => {
@@ -44,7 +44,7 @@ router.post('/register', auth.alreadyAuth, async (req, res) => {
             res.redirect('/users/')}
         )
     } catch (error) {
-        res.render('/users/register')
+        res.redirect('/users/register')
     }
 })
 
