@@ -4,15 +4,21 @@ const Models = require('../config/database')
 const auth = require('../config/authenticate')
 const multerEngine = require('../config/multerEngine')
 
-router.get('/', (req, res) => {
-    Models.Product.findAll({})
-        .then((products) => res.render('products/allProducts', {products: products}))
+router.get('/categories/:category_id/products', (req, res) => {
+    Models.Product.findAll({
+        where: {
+            categoryId: req.params.category_id
+        }
+    })
+        .then((products) => {
+            res.render('products/allProducts', {products: products})
+        })
         .catch((err) => res.send(err))
 })
 
-router.get('/addproduct', (req, res) => res.render('products/addProduct'))
+router.get('/products/addproduct', (req, res) => res.render('products/addProduct'))
 
-router.post('/addproduct', multerEngine.single('productImage'), (req, res, next) => {
+router.post('/products/addproduct', multerEngine.single('productImage'), (req, res, next) => {
     Models.Product.create({
         name: req.body.name,
         shortDescription: req.body.shortDescription,
@@ -27,9 +33,9 @@ router.post('/addproduct', multerEngine.single('productImage'), (req, res, next)
     .catch((err) => res.send(err))
 })
 
-router.get('/testupload', (req, res) => res.render('products/producttest'))
+router.get('/products/testupload', (req, res) => res.render('products/producttest'))
 
-router.post('/testupload', multerEngine.single('avatar'), (req, res, next) => {
+router.post('/products/testupload', multerEngine.single('avatar'), (req, res, next) => {
 	Models.Product.create({
         imageOriginalName: req.file.originalname,
         imageMimeType: req.file.mimetype,
@@ -39,7 +45,7 @@ router.post('/testupload', multerEngine.single('avatar'), (req, res, next) => {
         .catch((err) => res.send(err))        
 })
 
-router.get('/readupload', (req, res) => {
+router.get('/products/readupload', (req, res) => {
     Models.Product.findAll({})
         .then(result => {
             if(result.length){

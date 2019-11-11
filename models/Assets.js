@@ -28,7 +28,7 @@ module.exports = (sequelize, Datatypes) => {
     })
 
     Asset.associate = (models) => {
-        Asset.belongsTo(models.Product)
+        Asset.belongsTo(models.Product, {as: 'product', foreignKey: 'productId'})
     }
 
     return Asset;

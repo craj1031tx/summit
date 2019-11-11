@@ -25,7 +25,6 @@ const models = {
 
 Object.keys(models).forEach((modelName) =>{
     if('associate' in models[modelName]) {
-        console.log('running inside of this block and currently association the following model: ', models)
         models[modelName].associate(models)
     }
 })

@@ -41,10 +41,11 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 //Express Router files
-app.use('/users', require('./routes/users'))
-app.use('/products', require('./routes/products'))
-app.use('/assets', require('./routes/assets'))
-app.use('/categories', require('./routes/categories'))
+app.use('/', require('./routes/users'))
+app.use('/', require('./routes/products'))
+app.use('/', require('./routes/assets'))
+app.use('/', require('./routes/categories'))
+app.use('/', require('./routes/takeouts'))
 
 app.get('/', (req, res) => {
     res.render('index', { layout: 'landing'});
@@ -54,5 +55,5 @@ app.get('/', (req, res) => {
 //     app.listen(process.env.PORT)
 // }) 
 
-db.selectiveSync(app.listen(process.env.PORT, () => console.log('now listening on: ' + process.env.PORT)))
+db.selectiveSync(app.listen(process.env.PORT, () => console.log('Server is now listening on: ' + process.env.PORT)))
 
