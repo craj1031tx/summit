@@ -7,7 +7,7 @@ const Models = require('../config/database')
 
 //since the app.js app.use function is already pointing to /users, all routes below will assume url/users is prepended.
 //this route is currently set up for testing and does not have any authentication
-router.get('/users/', (req, res) => {
+router.get('/users/', auth.isAuth, (req, res) => {
     Models.User.findAll().then(users => {
         res.render('users/allUsers', {users: users});
       });
@@ -47,25 +47,9 @@ router.post('/users/register', auth.alreadyAuth, async (req, res) => {
     }
 })
 
-router.delete('/logout', (req, res) => {
+router.delete('/users/logout', (req, res) => {
     req.logOut()
     res.redirect('/users/login')
-})
-
-
-//test user route to print out random database information...
-router.get('/test', (req, res) => {
-    Model.User.findAll({
-        limit: 1,
-        where: {
-            email: "f@f.com"
-        }
-    })
-    .then(
-        singleUser => {
-            console.log("here is the single user: " + JSON.stringify(singleUser))
-            res.send(singleUser[0])
-        })
 })
 
 

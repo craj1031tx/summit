@@ -10,11 +10,10 @@ var aunthenticate = {
     //protect already logged in users from visiting login or register pages
     alreadyAuth: function(req, res, next){
         if (req.isAuthenticated()) {
-            return res.redirect('/')
+            return res.redirect('/categories')
         }
         next()
     }
-
 }
 
 module.exports = aunthenticate

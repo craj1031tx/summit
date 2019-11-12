@@ -1,4 +1,4 @@
-<h1>List of Assets</h1>
+<h1>Assets in your new takeout</h1>
 <table class="table">
   <thead>
     <tr>
@@ -27,3 +27,7 @@
     {{/each}}
   </tbody>
 </table>
+
+<form action="/takeouts/create_new_takeout" method="POST">
+    <button type="submit" class="btn btn-primary">Create this takeout!</button>
+</form>

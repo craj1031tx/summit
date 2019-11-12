@@ -46,7 +46,7 @@ router.post('/assets/addasset', multerEngine.single('asset'), (req, res, next) =
         assetMulterName: req.file.filename,
         productId: 1
     })
-    .then((savedProduct) => res.redirect('/assets'))
+    .then((savedProduct) => res.redirect('/categories'))
     .catch((err) => res.send(err))
 })
 
