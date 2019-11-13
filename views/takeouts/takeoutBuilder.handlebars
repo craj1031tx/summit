@@ -19,9 +19,7 @@
             <a class="btn btn-success" href="/uploads/{{assetMulterName}}" download="{{assetOriginalName}}">Download</a>
         </td>
         <td>
-            <form action="/takeouts/add_to_takeout/{{id}}" method="POST">
-                <button type="submit" class="btn btn-primary">Add to takeout</button>
-            </form>
+            <a class="btn btn-danger" href="/takeouts/remove_from_takeout/{{id}}">Remove</a>
         </td>       
     </tr>
     {{/each}}
