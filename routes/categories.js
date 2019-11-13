@@ -1,11 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const Models = require('../config/database')
+const auth = require('../config/authenticate')
 const multerEngine = require('../config/multerEngine')
 
-router.get('/categories/', (req, res) => {
+router.get('/categories/', auth.isAuth, (req, res) => {
     Models.Category.findAll({})
-        .then((categories) => res.render('categories/allCategories', {categories: categories}))
+        .then((categories) => res.render('categories/allCategories', {categories: categories, user: req.user}))
         .catch((err) => {
             console.log(err)
             res.send(err)

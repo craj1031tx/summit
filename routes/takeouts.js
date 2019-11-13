@@ -77,7 +77,7 @@ router.get('/takeouts/remove_from_takeout/:asset_id', (req, res) => {
         var itemToRemove = req.params.asset_id
         var oldArr = req.session.newUserTakeout
         var newArr = oldArr.filter((temp) => temp !== itemToRemove)
-        req.session.newUserTakeout = newArr
+        req.session.newUserTakeout = newArr //TODO try refactoring this down so that
         if(newArr.length === 0) {
             req.session.newUserTakeout = undefined
         }

@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt')
 module.exports = function(passport) {
     passport.use(
         new LocalStrategy({ usernameField: 'email'}, (email, password, done) => {
-            console.log("the passed email is: ", email)
             //Match User
             Models.User.findAll({
                 limit: 1,
@@ -16,7 +15,7 @@ module.exports = function(passport) {
             })
                 .then(singleUser => {
                     if(singleUser.length==0){
-                        return done(null, false, { message: 'the user is not registered'}); 
+                        return done(null, false, { message: 'That email is not registered'}); //TODO revert this to a more generic error for production - error messages might be broken due to switch from express-flash to connect-flash
                     }
                     //Matching the password
                     bcrypt.compare(password, singleUser[0].password, (err, isMatch) => {
@@ -26,7 +25,7 @@ module.exports = function(passport) {
                         if(isMatch){
                             return done(null, singleUser[0]);
                         } else {
-                            return done(null, false, { message: 'the passwords do not match'})
+                            return done(null, false, { message: 'The password is incorrect'})  //TODO revert this to a more generic error for production - error messages might be broken due to switch from express-flash to connect-flash
                         }
                     })
                 })

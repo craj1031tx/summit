@@ -6,11 +6,11 @@ if (process.env.NODE_ENV !== 'proudction'){
 const express = require('express')
 const bodyParser = require('body-parser')
 const passport = require('passport')
-const flash = require('express-flash')
 const session = require('express-session')
 const methodOverride = require('method-override')
 const path = require('path')
 const exphbs = require('express-handlebars')
+const flash = require('connect-flash')
 
 //importing and invoking passport middleware passport
 require('./config/passport-config')(passport)
@@ -36,9 +36,19 @@ app.use(session({
     saveUninitialized: false
 }))
 
+//Flash message initialization and global variable instatiation
+app.use(flash())
+app.use((req, res, next) =>{
+    res.locals.success_msg = req.flash('success_msg')
+    res.locals.error_message = req.flash('error_msg')
+    next()
+})
+
+
 //Passport Middleware
 app.use(passport.initialize())
 app.use(passport.session())
+
 
 //Express Router files
 app.use('/', require('./routes/users'))
@@ -50,10 +60,6 @@ app.use('/', require('./routes/takeouts'))
 app.get('/', auth.alreadyAuth, (req, res) => {
     res.render('index', { layout: 'landing'});
 })
-
-// db.sequelize.sync({force: false}).then(() => {
-//     app.listen(process.env.PORT)
-// }) 
 
 db.selectiveSync(app.listen(process.env.PORT, () => console.log('Server is now listening on: ' + process.env.PORT)))
 

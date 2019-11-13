@@ -36,7 +36,7 @@ models.Sequelize = Sequelize
     //selective syncing for development. when switching to migrations, remove this...
     //select the Model to run the sync on and then set the force setting to true. 
 models.selectiveSync = (cb) => {
-    models.Takeout.sync({force: false})
+    models.User.sync({force: false})
     return cb
 }
 

@@ -7,7 +7,7 @@ const Models = require('../config/database')
 
 //since the app.js app.use function is already pointing to /users, all routes below will assume url/users is prepended.
 //this route is currently set up for testing and does not have any authentication
-router.get('/users/', auth.isAuth, (req, res) => {
+router.get('/users/', auth.isAdmin, (req, res) => {
     Models.User.findAll().then(users => {
         res.render('users/allUsers', {users: users});
       });
@@ -30,19 +30,45 @@ router.get('/users/register', auth.alreadyAuth, (req, res) => {
 })
 
 router.post('/users/register', auth.alreadyAuth, async (req, res) => {
+
+    const {firstName, lastName, email, password, password2} = req.body //destructuring from the json in req.body to do controller verification
+    let errors = []
+    if(!firstName || !lastName || !email || !password || !password2){
+        errors.push({msg: "Please make sure all fields are correctly filled out"})
+    }
+
+    if(password !== password2){
+        errors.push({msg: "Please make sure your passwords match"})
+    }
+
+    if(password.length <= 6 || password.length > 30) {
+        errors.push({msg: "Please make sure that your password is between 6 and 30 characters."})
+    }
+
+    if(errors.length > 0){
+        return res.render('users/register', {firstName, lastName, email, password, password2, layout: 'landing'})
+    }
+
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
         Models.User.create({
             email: req.body.email,
-            name: req.body.name,
-            password: hashedPassword,
-            userLevel: 1
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            password: hashedPassword
         })
         .then((newUser) => {
             console.log("here is the new user: " + JSON.stringify(newUser, null, 4)) //remove console.log for production
-            res.redirect('/users/')}
+            req.flash('success_msg', 'You are now registered and may login')
+            res.redirect('/users/login')}
         )
+        .catch((valError) => {
+            console.log("CREATION ERROR IS: " + valError)
+            res.send(valError)
+            //res.redirect('/users/register')
+        })
     } catch (error) {
+        console.log("BCRYPT ERROR IS: " + error)
         res.redirect('/users/register')
     }
 })

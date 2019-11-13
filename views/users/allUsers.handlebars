@@ -1,7 +1,9 @@
+<h1>All Users (Admin Only View)</h1>
 <table class="table">
   <thead>
     <tr>
-        <th scope="col">Name</th>
+        <th scope="col">First</th>
+        <th scope="col">Last</th>
         <th scope="col">Email</th>
         <th scope="col">userLevel</th>
         <th scope="col">Actions</th>
@@ -10,12 +12,13 @@
   <tbody>
     {{#each users}}  
     <tr>
-        <td>{{name}}</td>
+        <td>{{firstName}}</td>
+        <td>{{lastName}}</td>
         <td>{{email}}</td>
         <td>{{userLevel}}</td>
         <td>
-            <a class="btn btn-primary" href="/users/lol/{{id}}" role="button">Primary</a>
-            <a class="btn btn-success" href="/users/lol/{{id}}" role="button">Success</a>
+            <a class="btn btn-primary" href="/users/lol/{{id}}" role="button">Inspect</a>
+            <a class="btn btn-success" href="/users/lol/{{id}}" role="button">Edit</a>
             <a class="btn btn-danger" href="/users/lol/{{id}}" role="button">Delete</a>
         <td>
     </tr>
