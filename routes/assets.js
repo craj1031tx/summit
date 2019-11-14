@@ -5,15 +5,21 @@ const auth = require('../config/authenticate')
 const multerEngine = require('../config/multerEngine')
 
 router.get('/categories/:category_id/products/:product_id/assets', (req, res) => {
-    Models.Asset.findAll({
+    Models.Product.findOne({
         where: {
-            productId: req.params.product_id
-        }
+            id: req.params.product_id
+        },
+        include: [
+            {
+                model: Models.Asset,
+                as: "assets"
+            }
+        ]
     })
-        .then((assets) => {
-            res.render('assets/allAssets', {assets: assets})
-        })
-        .catch((err) => console.log(err))
+    .then((results) => {
+        res.render('assets/allAssets', {results: results})
+    })
+    .catch((err) => res.send(err))
 })
 
 router.get('/assettestroute', (req, res) => {
@@ -37,16 +43,25 @@ router.get('/assettestroute', (req, res) => {
 router.get('/assets/addasset', (req, res) => res.render('assets/addAsset'))
 
 router.post('/assets/addasset', multerEngine.single('asset'), (req, res, next) => {
+    //TODO add validations for new assets. 
+
     Models.Asset.create({
         name: req.body.name,
+        contentType: contentType,
         privLevel: 1,
         assetMimeType: req.file.mimetype,
         assetOriginalName: req.file.originalname,
         assetMulterName: req.file.filename,
         productId: 1
     })
-    .then((savedProduct) => res.redirect('/categories'))
-    .catch((err) => res.send(err))
+    .then((savedProduct) => {
+        res.redirect('/categories')
+    })
+    .catch((err) => {
+        console.log(err)
+        req.flash('error_msg', "An error was encountered, please speak to a site administrator.")
+        res.redirect('/')
+    })
 })
 
 

@@ -9,19 +9,18 @@
     {{/if}}
 </div>
 
+<br>
+
 <div class="row">
 <div class="card-columns">
 {{#each categories}}
 <div class="card">
-    <div class="card-header">
-        {{name}}        
-    </div>
     <img src="/uploads/{{imageMulterName}}" class="card-img-top" alt="image for the category {{name}}" width="200">
     <div class="card-body">
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <h4 class="card-text">{{name}}</h4>
         {{#if ../user.isAdmin}}
             <div class="btn-group" role="group" aria-label="Basic example">
-                <a href="/categories/{{id}}/products" class="card-link">Product</a>
+                <a href="/categories/{{id}}/products" class="card-link">Products</a>
                 <a href="/categories/{{id}}/edit" class="card-link">Edit</a>
                 <a href="/categories/{{id}}/delete" class="card-link">Delete</a>
             </div>

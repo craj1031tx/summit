@@ -4,14 +4,14 @@ const Models = require('../config/database')
 const auth = require('../config/authenticate')
 const multerEngine = require('../config/multerEngine')
 
-router.get('/categories/:category_id/products', (req, res) => {
+router.get('/categories/:category_id/products', auth.isAuth, (req, res) => {
     Models.Product.findAll({
         where: {
             categoryId: req.params.category_id
         }
     })
         .then((products) => {
-            res.render('products/allProducts', {products: products})
+            res.render('products/allProducts', {products: products, user: req.user})
         })
         .catch((err) => res.send(err))
 })

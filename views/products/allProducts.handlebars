@@ -4,9 +4,17 @@
     <div class="card">
         <img src="/uploads/{{imageMulterName}}" class="card-img-top" alt="image for the category {{name}}" width="200">
         <div class="card-body">
-            <h5 class="card-title">{{name}}</h5>
+            <h4 class="card-title">{{name}}</h4>
             <p class="card-text">{{shortDescription}}</p>
+            {{#if ../user.isAdmin}}
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <a href="/categories/{{categoryId}}/products/{{id}}/assets" class="card-link">Assets</a>
+                <a href="/products/{{id}}/edit" class="card-link">Edit</a>
+                <a href="/products/{{id}}/delete" class="card-link">Delete</a>
+            </div>
+        {{else}}
             <a href="/categories/{{categoryId}}/products/{{id}}/assets" class="btn btn-primary">View Assets</a>
+        {{/if}}
         </div>
     </div>
     {{/each}}

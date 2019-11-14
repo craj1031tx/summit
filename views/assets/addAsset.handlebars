@@ -6,7 +6,15 @@
     </div>
     <div class="form-group">
         <label for="name">Content Type</label>
-        <input type="text" class="form-control" id="contentType" placeholder="Short Description" name="shortDescription">
+        <select id="contentType" name="contentType">
+            <option value="Sales Deck">Sales Deck</option>
+            <option value="One Pager">One Pager</option>
+            <option value="Solution Guide">Solution Guide</option>
+            <option value="Battlecard">Battlecard</option>
+            <option value="Datasheet">Datasheet</option>
+        </select>
+           {{!-- TODO add bootstrap classes to select dropdown box and ensure that select box can live within a form group. --}}
+           {{!-- TODO add a default to the select field so that contentType doesn't come through empty. --}}
     </div>
     <div class="form-group">
         <label for="name">Asset</label>

@@ -126,6 +126,8 @@ router.get('/takeouts/retrieve_takeout', (req,res) => {
         .then((results) => {
             //there are no results, redirect back to landing page
             if(!results) {
+                console.log('the lookup wassnt successful, setting flash')
+                req.flash('error_msg', "That token does not exist or is no longer valid.")
                 return res.redirect('/')
             }
             //there are results (found a token match), proceed with querying token and displaying all assets. 
@@ -139,7 +141,7 @@ router.get('/takeouts/retrieve_takeout', (req,res) => {
             })
             .catch((err) => {
                 console.log(err)
-                res.redirect('/')
+                res.redirect('/categories')
             })
         })
         .catch((err) => {

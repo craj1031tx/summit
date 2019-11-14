@@ -17,9 +17,9 @@ router.get('/users/login', auth.alreadyAuth, (req, res) => {
     res.render('users/login', { layout: 'landing'});
 })
 
-router.post('/users/login', (req, res, next) => {
+router.post('/users/login', (req, res, next) => {   //TODO figure out if auth.alreadyAuth should be addded to this post route. It is working normally on the register post route. 
     passport.authenticate('local', {
-        successRedirect: '/users',
+        successRedirect: '/categories',
         failureRedirect: '/users/login',
         failureFlash: true
     })(req, res, next)
@@ -73,7 +73,7 @@ router.post('/users/register', auth.alreadyAuth, async (req, res) => {
     }
 })
 
-router.delete('/users/logout', (req, res) => {
+router.delete('/users/logout', (req, res) => {  //TODO determine if auth.isAuth should be added to this logout DELETE route
     req.logOut()
     res.redirect('/users/login')
 })

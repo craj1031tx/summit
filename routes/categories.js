@@ -13,11 +13,13 @@ router.get('/categories/', auth.isAuth, (req, res) => {
         })
 })
 
-router.get('/categories/add_category', (req, res) => {
+router.get('/categories/add_category', auth.isAdmin, (req, res) => {
     res.render('categories/addCategory')
 })
 
-router.post('/categories/add_category', multerEngine.single('categoryImage'), (req, res, next) => {
+//TODO added an admin auth route to the multer post route for a new cat. Make sure that there is no conflict with the multer file upload
+//TODO need to find a way to reject/validate files during/after multer upload. req.file is invalid 
+router.post('/categories/add_category', auth.isAdmin, multerEngine.single('categoryImage'), (req, res, next) => { 
     Models.Category.create({
         name: req.body.name,
         imageOriginalName: req.file.originalname,

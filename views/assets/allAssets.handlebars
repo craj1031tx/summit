@@ -1,4 +1,8 @@
-<h1>List of Assets for {{results.name}}</h1>
+<br>
+<row>
+    <h1>Assets for {{results.name}}</h1>
+</row>
+<br>
 <table class="table">
   <thead>
     <tr>
@@ -6,6 +10,7 @@
         <th scope="col">Content Type</th>
         <th scope="col">privLevel</th>
         <th scope="col">Download</th>
+        <th scope="col">View</th>
         <th scope="col">Takeout</th>
     </tr>
   </thead>
@@ -17,6 +22,9 @@
         <td>{{privLevel}}</td>
         <td>
             <a class="btn btn-success" href="/uploads/{{assetMulterName}}" download="{{assetOriginalName}}">Download</a>
+        </td>
+        <td>
+            <a class="btn btn-info" href="/uploads/{{assetMulterName}}">View</a>
         </td>
         <td>
             <form action="/takeouts/add_to_takeout/{{id}}" method="POST">
