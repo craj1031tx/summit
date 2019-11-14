@@ -13,11 +13,11 @@ router.get('/categories/', auth.isAuth, (req, res) => {
         })
 })
 
-router.get('/categories/addcategory', (req, res) => {
+router.get('/categories/add_category', (req, res) => {
     res.render('categories/addCategory')
 })
 
-router.post('/categories/addcategory', multerEngine.single('categoryImage'), (req, res, next) => {
+router.post('/categories/add_category', multerEngine.single('categoryImage'), (req, res, next) => {
     Models.Category.create({
         name: req.body.name,
         imageOriginalName: req.file.originalname,
@@ -30,9 +30,7 @@ router.post('/categories/addcategory', multerEngine.single('categoryImage'), (re
         
 })
 
-router.get('/categories/:id', (req, res) => {
-    res.send(req.params.id)
-})
+//admin routes for categories. get all table. 
 
 
 

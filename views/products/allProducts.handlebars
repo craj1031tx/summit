@@ -1,14 +1,14 @@
 <h1>Products</h1>
-<div class="card-deck">
-{{#each products}}
-<div class="card" style="width: 20rem;">
-  <img src="/uploads/{{imageMulterName}}" class="card-img-top" alt="image for the category {{name}}" height="300">
-  <div class="card-body">
-    <h5 class="card-title">{{name}}</h5>
-    <p class="card-text">{{shortDescription}}</p>
-    <a href="/categories/{{categoryId}}/products/{{id}}/assets" class="btn btn-primary">View Assets</a>
-  </div>
-</div>
-{{/each}}
+<div class="card-columns">
+    {{#each products}}
+    <div class="card">
+        <img src="/uploads/{{imageMulterName}}" class="card-img-top" alt="image for the category {{name}}" width="200">
+        <div class="card-body">
+            <h5 class="card-title">{{name}}</h5>
+            <p class="card-text">{{shortDescription}}</p>
+            <a href="/categories/{{categoryId}}/products/{{id}}/assets" class="btn btn-primary">View Assets</a>
+        </div>
+    </div>
+    {{/each}}
 </div>
 

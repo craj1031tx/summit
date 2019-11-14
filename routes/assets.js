@@ -11,7 +11,6 @@ router.get('/categories/:category_id/products/:product_id/assets', (req, res) =>
         }
     })
         .then((assets) => {
-            console.log('here are the assets that were found: ' + JSON.stringify(assets, null, 4))
             res.render('assets/allAssets', {assets: assets})
         })
         .catch((err) => console.log(err))
@@ -30,7 +29,7 @@ router.get('/assettestroute', (req, res) => {
         ]
     })
     .then((results) => {
-        res.send(results.assets)
+        res.render('assets/allAssets', {results: results})
     })
     .catch((err) => res.send(err))
 })

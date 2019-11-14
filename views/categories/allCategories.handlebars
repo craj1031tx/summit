@@ -1,16 +1,35 @@
-<h1>
-    Categories
-</h1>
-<div class="card-deck">
+<br>
+<div class="row">
+    <h1>Categories</h1>
+</div>
+
+<div class="row">
+    {{#if user.isAdmin}}
+        <a href="/categories/add_category" class="btn btn-primary">Add a new category</a>
+    {{/if}}
+</div>
+
+<div class="row">
+<div class="card-columns">
 {{#each categories}}
-<div class="card" style="width: 25rem;">
-  <img src="/uploads/{{imageMulterName}}" class="card-img-top" alt="image for the category {{name}}" height="300">
-  <div class="card-body">
-    <h5 class="card-title">{{name}}</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="/categories/{{id}}/products" class="btn btn-primary">View Products</a>
-  </div>
+<div class="card">
+    <div class="card-header">
+        {{name}}        
+    </div>
+    <img src="/uploads/{{imageMulterName}}" class="card-img-top" alt="image for the category {{name}}" width="200">
+    <div class="card-body">
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        {{#if ../user.isAdmin}}
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <a href="/categories/{{id}}/products" class="card-link">Product</a>
+                <a href="/categories/{{id}}/edit" class="card-link">Edit</a>
+                <a href="/categories/{{id}}/delete" class="card-link">Delete</a>
+            </div>
+        {{else}}
+            <a href="/categories/{{id}}/products" class="btn btn-primary">View Products</a>
+        {{/if}}
+    </div>
 </div>
 {{/each}}
 </div>
-
+</div>

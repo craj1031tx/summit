@@ -43,6 +43,7 @@ router.get('/takeouts/my_takeouts', (req, res) => {
 //Allows a user to inspect their currently being built takeout. If the newUserTakeout sesion array is empty, then redirect to the categories page so that they can build. If the search returns empty for some reason, also redirect to category.
 router.get('/takeouts/new_takeout', (req, res) => {
     if(!req.session.newUserTakeout){ 
+        req.flash('success_msg', 'You currently do not have a takeout under construction.')
         res.redirect('/categories')
         return
     }
