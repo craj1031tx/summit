@@ -15,7 +15,9 @@
 <div class="card-columns">
 {{#each categories}}
 <div class="card">
-    <img src="/uploads/{{imageMulterName}}" class="card-img-top" alt="image for the category {{name}}" width="200">
+    <a href="/categories/{{id}}/products">
+        <img src="/uploads/{{imageMulterName}}" class="card-img-top" alt="image for the category {{name}}" width="200">
+    </a>
     <div class="card-body">
         <h4 class="card-text">{{name}}</h4>
         {{#if ../user.isAdmin}}

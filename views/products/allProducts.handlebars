@@ -2,14 +2,16 @@
 <div class="card-columns">
     {{#each products}}
     <div class="card">
-        <img src="/uploads/{{imageMulterName}}" class="card-img-top" alt="image for the category {{name}}" width="200">
+        <a href="/categories/{{categoryId}}/products/{{id}}/assets">
+            <img src="/uploads/{{imageMulterName}}" class="card-img-top" alt="image for the category {{name}}" width="200">
+        </a>
         <div class="card-body">
             <h4 class="card-title">{{name}}</h4>
             <p class="card-text">{{shortDescription}}</p>
             {{#if ../user.isAdmin}}
             <div class="btn-group" role="group" aria-label="Basic example">
                 <a href="/categories/{{categoryId}}/products/{{id}}/assets" class="card-link">Assets</a>
-                <a href="/products/{{id}}/edit" class="card-link">Edit</a>
+                <a href="/products/{{id}}" class="card-link">Info</a>
                 <a href="/products/{{id}}/delete" class="card-link">Delete</a>
             </div>
         {{else}}

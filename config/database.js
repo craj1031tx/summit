@@ -24,11 +24,7 @@ const models = {
     Takeout: sequelize.import('../models/Takeouts'),
 }
 
-Object.keys(models).forEach((modelName) =>{
-    if('associate' in models[modelName]) {
-        models[modelName].associate(models)
-    }
-})
+
 
 models.sequelize = sequelize
 models.Sequelize = Sequelize
@@ -36,8 +32,14 @@ models.Sequelize = Sequelize
     //selective syncing for development. when switching to migrations, remove this...
     //select the Model to run the sync on and then set the force setting to true. 
 models.selectiveSync = (cb) => {
-    models.User.sync({force: false})
+    //models.Takeout.sync({force: false})
     return cb
 }
+
+Object.keys(models).forEach((modelName) =>{
+    if('associate' in models[modelName]) {
+        models[modelName].associate(models)
+    }
+})
 
 module.exports = models

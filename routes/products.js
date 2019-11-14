@@ -22,14 +22,13 @@ router.post('/products/addproduct', multerEngine.single('productImage'), (req, r
     Models.Product.create({
         name: req.body.name,
         shortDescription: req.body.shortDescription,
-        longDescription: req.body.longDescription,
         privLevel: 1,
         imageMimeType: req.file.mimetype,
         imageOriginalName: req.file.originalname,
         imageMulterName: req.file.filename,
-        categoryId: 1
+        categoryId: 4
     })
-    .then((savedProduct) => res.redirect('/products'))
+    .then((savedProduct) => res.redirect('/categories'))
     .catch((err) => res.send(err))
 })
 

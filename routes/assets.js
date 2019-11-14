@@ -47,7 +47,7 @@ router.post('/assets/addasset', multerEngine.single('asset'), (req, res, next) =
 
     Models.Asset.create({
         name: req.body.name,
-        contentType: contentType,
+        contentType: req.body.contentType,
         privLevel: 1,
         assetMimeType: req.file.mimetype,
         assetOriginalName: req.file.originalname,
@@ -55,7 +55,7 @@ router.post('/assets/addasset', multerEngine.single('asset'), (req, res, next) =
         productId: 1
     })
     .then((savedProduct) => {
-        res.redirect('/categories')
+        res.redirect('/assets/addasset')
     })
     .catch((err) => {
         console.log(err)

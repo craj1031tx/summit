@@ -31,23 +31,24 @@ router.get('/users/register', auth.alreadyAuth, (req, res) => {
 
 router.post('/users/register', auth.alreadyAuth, async (req, res) => {
 
-    const {firstName, lastName, email, password, password2} = req.body //destructuring from the json in req.body to do controller verification
-    let errors = []
-    if(!firstName || !lastName || !email || !password || !password2){
-        errors.push({msg: "Please make sure all fields are correctly filled out"})
-    }
+    
+    // const {firstName, lastName, email, password, password2} = req.body //destructuring from the json in req.body to do controller verification
+    // let errors = []
+    // if(!firstName || !lastName || !email || !password || !password2){
+    //     errors.push({msg: "Please make sure all fields are correctly filled out"})
+    // }
 
-    if(password !== password2){
-        errors.push({msg: "Please make sure your passwords match"})
-    }
+    // if(password !== password2){
+    //     errors.push({msg: "Please make sure your passwords match"})
+    // }
 
-    if(password.length <= 6 || password.length > 30) {
-        errors.push({msg: "Please make sure that your password is between 6 and 30 characters."})
-    }
+    // if(password.length <= 6 || password.length > 30) {
+    //     errors.push({msg: "Please make sure that your password is between 6 and 30 characters."})
+    // }
 
-    if(errors.length > 0){
-        return res.render('users/register', {firstName, lastName, email, password, password2, layout: 'landing'})
-    }
+    // if(errors.length > 0){
+    //     return res.render('users/register', {firstName, lastName, email, password, password2, layout: 'landing'})
+    // }
 
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
