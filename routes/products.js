@@ -5,20 +5,27 @@ const auth = require('../config/authenticate')
 const multerEngine = require('../config/multerEngine')
 
 router.get('/categories/:category_id/products', auth.isAuth, (req, res) => {
-    Models.Product.findAll({
+    Models.Category.findAll({
         where: {
-            categoryId: req.params.category_id
+            id: req.params.category_id
+        },
+        include: {
+            model: Models.Product,
+            as: 'products'
         }
     })
-        .then((products) => {
-            res.render('products/allProducts', {products: products, user: req.user})
+        .then((results) => {
+            res.render('products/allProducts', {results: results[0], user: req.user})
         })
         .catch((err) => res.send(err))
 })
 
-router.get('/products/addproduct', (req, res) => res.render('products/addProduct'))
+router.get('/categories/:category_id/products/addproduct', auth.isAdmin, (req, res) => {
+    res.render('products/addProduct', {categoryId: req.params.category_id})
+})
 
-router.post('/products/addproduct', multerEngine.single('productImage'), (req, res, next) => {
+router.post('/categories/:category_id/products/addproduct', auth.isAdmin, multerEngine.single('productImage'), (req, res, next) => {
+    //TODO need to add validations to image submission
     Models.Product.create({
         name: req.body.name,
         shortDescription: req.body.shortDescription,
@@ -26,9 +33,9 @@ router.post('/products/addproduct', multerEngine.single('productImage'), (req, r
         imageMimeType: req.file.mimetype,
         imageOriginalName: req.file.originalname,
         imageMulterName: req.file.filename,
-        categoryId: 4
+        categoryId: req.params.category_id
     })
-    .then((savedProduct) => res.redirect('/categories'))
+    .then((savedProduct) => res.redirect(`/categories/${req.params.category_id}/products`))
     .catch((err) => res.send(err))
 })
 

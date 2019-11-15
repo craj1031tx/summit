@@ -1,5 +1,5 @@
-<h1>Add a Product</h1>
-<form action="/products/addproduct" method="POST" enctype="multipart/form-data">
+<h1>Add a Product to {{categoryId}}</h1>
+<form action="/categories/{{categoryId}}/products/addproduct" method="POST" enctype="multipart/form-data">
   <div class="form-group">
     <label for="name">Name</label>
     <input type="text" class="form-control" id="name" placeholder="Name" name="name">
