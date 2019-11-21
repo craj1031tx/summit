@@ -33,9 +33,9 @@ router.get('/takeouts/my_takeouts', (req, res) => {
                 )                
             })
             Promise.all(promises).then((allResults) => {
-                console.log(allResults)
+                //console.log(allResults)
                 res.send(allResults)
-                // res.render('takeouts/myTakeouts', allResults)
+                //res.render('takeouts/myTakeouts', allResults[0])
                 //res.render('takeouts/test', allResults)
             })            
         })
