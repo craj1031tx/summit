@@ -1,0 +1,36 @@
+<h1>Name: {{asset.name}}</h1> 
+<ul class="list-group list-group-flush">
+    <ul>Content Type: {{asset.contentType}}</ul>
+    <ul>MIME Type: {{asset.assetMimeType}}</ul>
+    <ul>Filename: {{asset.assetOriginalName}}</ul>
+    <ul>Multer Name: {{asset.assetMulterName}}</ul>
+</ul>
+
+<br>
+
+<h3>Add a product assocation</h3>
+
+<form action="/assets/add_association/{{asset.id}}" method="POST">
+       <div class="form-group">
+        <label for="productId">Associate to which product?</label>
+        <select class="form-control" id="selectProductId" name="productId">
+            {{#each products}}
+                <option value="{{id}}">{{name}}</option>
+            {{/each}}
+        </select>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Add association</button>
+</form>
+
+<br>
+<h2>Current Associations</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product Association</th>
+            <th>Remove Association</th>
+        </tr>
+    </thead>
+</table>
+

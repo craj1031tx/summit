@@ -1,8 +1,17 @@
 <h1>Add an Asset</h1>
+
 <form action="/assets/addasset" method="POST" enctype="multipart/form-data">
     <div class="form-group">
         <label for="name">Name</label>
         <input type="text" class="form-control" id="name" placeholder="Name" name="name">
+    </div>
+    <div class="form-group">
+        <label for="productId">Associate to which product?</label>
+        <select class="form-control" id="selectProductId" name="productId">
+            {{#each products}}
+                <option value="{{id}}">{{name}}</option>
+            {{/each}}
+        </select>
     </div>
     <div class="form-group">
         <label for="name">Content Type</label>

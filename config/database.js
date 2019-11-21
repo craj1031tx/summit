@@ -22,6 +22,7 @@ const models = {
     Product: sequelize.import('../models/Products'),
     Asset: sequelize.import('../models/Assets'),
     Takeout: sequelize.import('../models/Takeouts'),
+    ProductAsset: sequelize.import('../models/ProductAsset')
 }
 
 
@@ -32,7 +33,9 @@ models.Sequelize = Sequelize
     //selective syncing for development. when switching to migrations, remove this...
     //select the Model to run the sync on and then set the force setting to true. 
 models.selectiveSync = (cb) => {
-    //models.Takeout.sync({force: false})
+    //models.Asset.sync({force: true})
+    //models.Product.sync({force: true})
+    //models.ProductAsset.sync({force: true})
     return cb
 }
 
