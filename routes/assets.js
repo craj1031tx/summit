@@ -61,6 +61,7 @@ router.get('/assettestroute', (req, res) => {
     .catch((err) => res.send(err))
 })
 
+//GET route for adding an asset page
 router.get('/assets/addasset', (req, res) => {
     //Get all products to pass a list of products to the front end so that a user can 'select' one - or potentially many - products to add an asset to. 
     Models.Product.findAll({})
@@ -68,6 +69,7 @@ router.get('/assets/addasset', (req, res) => {
     .catch((err) => res.send(err))
 })
 
+//POST route for submitting a new asset. 
 router.post('/assets/addasset', multerEngine.single('asset'), (req, res, next) => {
     //TODO add validations for new assets. 
 
@@ -99,6 +101,7 @@ router.post('/assets/addasset', multerEngine.single('asset'), (req, res, next) =
     })
 })
 
+//list of all assets in system. page displays a download, view, edit, and delete table for each individual asset.
 router.get('/assets', (req, res) => {
     Models.Asset.findAll({})
     .then((assets) => res.render('assets/adminAllAssets', {assets: assets}))
@@ -106,12 +109,20 @@ router.get('/assets', (req, res) => {
 })
 
 //TODO need to get productAsset table assocation so that products that the asset is associated with can be rendered in a table.
-//TODO: lots of DB queries here. Do a promise.all?
+//TODO: lots of DB queries here. Do a promise.all? OR is that no longer necessary with the new m:m association...?
 router.get('/assets/edit/:asset_id', (req, res) => {
     Models.Asset.findOne({
-        where: {id: req.params.asset_id}
+        where: {id: req.params.asset_id},
+        include: [  //including the list of products that this single asset is already associated with. 
+            {
+                model: Models.Product,
+                as: "products"
+            }
+        ]
     })
     .then((asset) => 
+        //finding all products so that the 'associate to a new product' list can be generated. 
+        //no need to add any validation here or to remove products from productAll list so that a dupe association can be made, as Sequelize already validates for dupe m:m associations.
         Models.Product.findAll({})
         .then((products) => res.render('assets/adminSingleAsset', {asset: asset, products: products})
         ))
@@ -132,6 +143,20 @@ router.post('/assets/add_association/:asset_id', (req, res) => {
             res.redirect(`/assets/edit/${req.params.asset_id}`)
         })
         .catch(err => res.send(err))
+    })
+    .catch(err => res.send(err))
+})
+
+
+router.get('/assets/remove_productasset_association/:asset_id/:product_id', (req, res) => {
+    Models.ProductAsset.destroy({
+        where: {
+            productId: req.params.product_id,
+            assetId: req.params.asset_id
+        }
+    })
+    .then(() => {
+        res.redirect(`/assets/edit/${req.params.asset_id}`)
     })
     .catch(err => res.send(err))
 })

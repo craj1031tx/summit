@@ -32,5 +32,13 @@
             <th>Remove Association</th>
         </tr>
     </thead>
+    <tbody>
+        {{#each asset.products}}
+            <tr>
+                <td>{{name}}</td>
+                <td><a class="btn btn-danger" href="/assets/remove_productasset_association/{{../asset.id}}/{{id}}">Remove</td>
+            </tr>
+        {{/each}}
+    </tbody>
 </table>
 
