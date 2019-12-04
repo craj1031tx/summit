@@ -56,6 +56,7 @@ app.use('/', require('./routes/products'))
 app.use('/', require('./routes/assets'))
 app.use('/', require('./routes/categories'))
 app.use('/', require('./routes/takeouts'))
+app.use('/', require('./routes/admins'))
 
 app.get('/', auth.alreadyAuth, (req, res) => {
     res.render('index', { layout: 'landing'});

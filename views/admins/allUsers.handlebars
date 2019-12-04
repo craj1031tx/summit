@@ -1,0 +1,33 @@
+<h1>All Users (Admin Only View)</h1>
+<table class="table">
+  <thead>
+    <tr>
+        <th scope="col">First</th>
+        <th scope="col">Last</th>
+        <th scope="col">Email</th>
+        <th scope="col">userLevel</th>
+        <th scope="col">Admin Verified?</th>
+        <th scope="col">Email Verified?</th>
+        <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each users}}  
+    <tr>
+        <td>{{firstName}}</td>
+        <td>{{lastName}}</td>
+        <td>{{email}}</td>
+        <td>{{userLevel}}</td>
+        <td>{{adminVerified}}</td>
+        <td>{{emailVerified}}</td>
+        <td>
+            <a class="btn btn-outline-info" href="/users/lol/{{id}}" role="button">Edit</a>
+            <a class="btn btn-outline-success" href="/admin/users/toggle_admin_verified/{{id}}" role="button">!Active</a>
+            <a class="btn btn-outline-danger" href="/admin/users/toggle_email_verified/{{id}}" role="button">!Email</a>
+            <a class="btn btn-outline-danger" href="/users/lol/{{id}}" role="button">Delete</a>
+
+        <td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>

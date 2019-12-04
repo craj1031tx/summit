@@ -4,14 +4,11 @@ const passport = require('passport')
 const auth = require('../config/authenticate')
 const bcrypt = require('bcrypt')
 const Models = require('../config/database')
+const crypto = require('crypto')
 
 //since the app.js app.use function is already pointing to /users, all routes below will assume url/users is prepended.
 //this route is currently set up for testing and does not have any authentication
-router.get('/users/', auth.isAdmin, (req, res) => {
-    Models.User.findAll().then(users => {
-        res.render('users/allUsers', {users: users});
-      });
-})
+
 
 router.get('/users/login', auth.alreadyAuth, (req, res) => {
     res.render('users/login', { layout: 'landing'});
@@ -51,12 +48,17 @@ router.post('/users/register', auth.alreadyAuth, async (req, res) => {
     // }
 
     try {
+        //TODO need to add crypto function so that it properly embeds in database
+        const emailVerificationHashCrypto = crypto.pseudoRandomBytes(16, function (err, raw) {
+            return (raw.toString('hex'));
+          });
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
         Models.User.create({
             email: req.body.email,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
-            password: hashedPassword
+            password: hashedPassword,
+            emailVerificationHash: emailVerificationHashCrypto
         })
         .then((newUser) => {
             console.log("here is the new user: " + JSON.stringify(newUser, null, 4)) //remove console.log for production

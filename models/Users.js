@@ -34,7 +34,18 @@ module.exports = (sequelize, Datatypes) => {
             isAdmin: {
                 type: Datatypes.BOOLEAN,
                 defaultValue: false
-            }
+            },
+            emailVerified: {
+                type: Datatypes.BOOLEAN,
+                defaultValue: false
+            },
+            adminVerified: {
+                type: Datatypes.BOOLEAN,
+                defaultValue: false
+            },
+            emailVerificationHash: {
+                type: Datatypes.TEXT    //generated when a user first signs up with a crypto
+            },
     })
 
     User.associate = (models) => {
