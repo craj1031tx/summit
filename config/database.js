@@ -37,7 +37,8 @@ const models = {
     Product: sequelize.import('../models/Products'),
     Asset: sequelize.import('../models/Assets'),
     Takeout: sequelize.import('../models/Takeouts'),
-    ProductAsset: sequelize.import('../models/ProductAsset')
+    ProductAsset: sequelize.import('../models/ProductAsset'),
+    TakeoutAsset: sequelize.import('../models/TakeoutAsset')
 }
 
 
@@ -55,6 +56,7 @@ models.selectiveSync = (cb) => {
     // models.Takeout.sync({force: true})
     // models.Product.sync({force: true})
     // models.ProductAsset.sync({force: true})
+    // models.TakeoutAsset.sync({force: true})
     return cb
 }
 

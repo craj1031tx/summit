@@ -17,7 +17,15 @@ module.exports = (sequelize, Datatypes) => {
 
     Takeout.associate = (models) => {
         Takeout.belongsTo(models.User, {as: 'userTakeout', foreignKey: 'userId'})
+
+        Takeout.belongsToMany(models.Asset, {
+            through: 'takeoutAsset',
+            as: 'assets', 
+            foreignKey: 'takeoutId',
+            otherKey: 'assetId'
+        })
     }
+
 
     return Takeout;
 }

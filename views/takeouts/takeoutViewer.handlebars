@@ -1,4 +1,4 @@
-<h1>Assets in takeout {{takeoutToken}}</h1>
+<h1>Assets in takeout {{takeout.takeoutToken}}</h1>
     <div class="btn btn-info">Email this takeout</div>
     <div class="btn btn-dark">Send via text</div>
 
@@ -13,7 +13,7 @@
     </tr>
   </thead>
   <tbody>
-    {{#each assets}}  
+    {{#each takeout.assets}}  
     <tr>
         <td>{{name}}</td>
         <td>{{contentType}}</td>

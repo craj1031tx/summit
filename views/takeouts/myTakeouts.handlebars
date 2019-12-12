@@ -1,8 +1,8 @@
 <h1>Your past takeouts</h1>
-{{allResults}}
 
-{{!-- {{#if takeouts}}
-    {{#each takeouts |oneTakeout|}}
+{{#if takeouts}}
+    {{#each takeouts as |oneTakeout|}}
+    <h2>Takeout code: {{oneTakeout.token}}</h2>
     <table class="table">
     <thead>
         <tr>
@@ -13,7 +13,7 @@
         </tr>
     </thead>
     <tbody>
-        {{#each oneTakeout}}  
+        {{#each oneTakeout.assets}}  
         <tr>
             <td>{{name}}</td>
             <td>{{contentType}}</td>
@@ -30,5 +30,5 @@
 
 {{else}}
 <h1>You haven't created any takeouts</h1>
-{{/if}} --}}
+{{/if}}
 

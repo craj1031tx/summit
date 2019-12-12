@@ -6,40 +6,28 @@ const crypto = require('crypto')    //creates random string to store files
 
 
 //route for a user to view all of their past takeouts in one place. 
-//TODO
+//TODO either use association or ensure that there isn't a crash if there are no takeouts found. 
 router.get('/takeouts/my_takeouts', (req, res) => {
-    var listOfTakeouts = []
     Models.Takeout.findAll({
         where: {
-            userId: 1 //TODO using 1 for debugging, revert to req.user.id 
-        }
+            userId: req.user.id
+        },
+        include: [{
+            model: Models.Asset,
+            as: 'assets'
+        }]
     })
-        .then((usersTakeouts) => {
-            var promises = []
-            console.log('how many takeouts are in the array: ' + JSON.stringify(usersTakeouts))
-            usersTakeouts.forEach((item) => {
-                console.log('each item in this array is: ' + JSON.stringify(item))
-                console.log('the takeout asset array is : ' + item.takeoutAssets)
-                promises.push(
-                    Models.Asset.findAll({
-                        where: {
-                            id: item.takeoutAssets
-                        }
-                    })
-                    .then((assetResults) => {
-                        console.log('inside the promise block for the takeout: ' + assetResults)
-                        return assetResults
-                    })
-                )                
-            })
-            Promise.all(promises).then((allResults) => {
-                //console.log(allResults)
-                res.send(allResults)
-                //res.render('takeouts/myTakeouts', allResults[0])
-                //res.render('takeouts/test', allResults)
-            })            
+        .then((allTakeouts) => {
+            if(allTakeouts.length){
+                return res.render('takeouts/myTakeouts', {takeouts: allTakeouts})//res.send(allTakeouts)
+            }
+        req.flash('success_msg', "You don't have any takeouts.")
+        res.redirect('/')
         })
-        .catch((err) => res.send(err))
+        .catch((err) => {
+            console.log('in catch block...')
+            res.send(err)
+        })
 })
 
 //Allows a user to inspect their currently being built takeout. If the newUserTakeout sesion array is empty, then redirect to the categories page so that they can build. If the search returns empty for some reason, also redirect to category.
@@ -101,15 +89,20 @@ router.post('/takeouts/create_new_takeout', (req, res) => {
             console.log('inside the block' + takeoutToken)
             Models.Takeout.create({
                 token: takeoutToken,
-                takeoutAssets: req.session.newUserTakeout,
+                takeoutAssets: [],//req.session.newUserTakeout, TODO: can be removed
                 isActive: true,
                 expiration: futureExpiration,
                 userId: req.user.id
             })
-            .then((results) => {
+            .then((savedTakeout) => {
+                req.session.newUserTakeout.forEach(function(assetId) {
+                    Models.Asset.findOne({where: {id: assetId} })
+                    .then((foundAsset) => savedTakeout.addAsset(foundAsset))
+                })
+
                 //reset the users newUserTakeout builder to an empty array and redirect the user to the view for that takeout. 
                 req.session.newUserTakeout = [];    
-                res.redirect('/takeouts/retrieve_takeout/?token='+results.token)
+                res.redirect('/takeouts/retrieve_takeout/?token='+savedTakeout.token)
             })
             .catch((err) => console.log(err))
         });
@@ -123,28 +116,20 @@ router.get('/takeouts/retrieve_takeout', (req,res) => {
     Models.Takeout.findOne({
         where: {
             token: req.query.token
-        }
+        },
+        include: [{
+            model: Models.Asset,
+            as: 'assets'
+        }]
     })
         .then((results) => {
             //there are no results, redirect back to landing page
             if(!results) {
-                console.log('the lookup wassnt successful, setting flash')
                 req.flash('error_msg', "That token does not exist or is no longer valid.")
                 return res.redirect('/')
             }
             //there are results (found a token match), proceed with querying token and displaying all assets. 
-            Models.Asset.findAll({
-                where: {
-                    id: results.takeoutAssets
-                }
-            })
-            .then((assetResults) => {
-                res.render('takeouts/takeoutViewer', {assets: assetResults, takeoutToken: req.query.token})
-            })
-            .catch((err) => {
-                console.log(err)
-                res.redirect('/categories')
-            })
+            res.render('takeouts/takeoutViewer', {takeout: results})
         })
         .catch((err) => {
             console.log(err)
