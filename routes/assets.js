@@ -3,6 +3,7 @@ const router = express.Router()
 const Models = require('../config/database')
 const auth = require('../config/authenticate')
 const multerEngine = require('../config/multerEngine')
+const mime = require('mime-types')
 
 router.get('/categories/:category_id/products/:product_id/assets', (req, res) => {
     Models.Product.findOne({
@@ -22,28 +23,9 @@ router.get('/categories/:category_id/products/:product_id/assets', (req, res) =>
     .catch((err) => res.send(err))
 })
 
-router.get('/assettestroute', (req, res) => {
-    // Models.Asset.findOne({
-    //     where: {
-    //         id: 1
-    //     }
-    // })
-    // .then((foundAsset) => {
-    //     console.log("The found asset is: " + foundAsset)
-    //     Models.Product.findOne({
-    //         where: {
-    //             id: 2
-    //         }
-    //     })
-    //     .then((foundProduct) => {
-    //         console.log("The found product is: " + foundProduct)
-    //         foundAsset.addProducts(foundProduct)
-    //         console.log("The join table was set correctly.")
-    //         res.end()
-    //     })
-    // })
 
-    //this might work for m:m joins? probably a better way to do it though...
+//TODO: this can be deleted once out of dev
+router.get('/assettestroute', (req, res) => {
     Models.Product.findOne({
         where: {
             id: 2
@@ -160,4 +142,18 @@ router.get('/assets/remove_productasset_association/:asset_id/:product_id', (req
     })
     .catch(err => res.send(err))
 })
+
+
+//Asset download route - submit an asset id and get served the asset. 
+//will be publically open - DO NOT ADD AUTH route. However, will need to add rate limiting so that it can't be scrapped. 
+router.get('/assets/download/:asset_multer_name', (req, res) => {
+    Models.Asset.findOne({
+        where: {assetMulterName: req.params.asset_multer_name}
+    })
+    .then((asset) => {
+        res.download("./assetstorage/"+asset.assetMulterName, asset.assetOriginalName)
+    })
+})
+
+//asset.assetOriginalName
 module.exports = router;

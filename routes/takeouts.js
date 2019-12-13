@@ -6,7 +6,6 @@ const crypto = require('crypto')    //creates random string to store files
 
 
 //route for a user to view all of their past takeouts in one place. 
-//TODO either use association or ensure that there isn't a crash if there are no takeouts found. 
 router.get('/takeouts/my_takeouts', (req, res) => {
     Models.Takeout.findAll({
         where: {
@@ -21,16 +20,15 @@ router.get('/takeouts/my_takeouts', (req, res) => {
             if(allTakeouts.length){
                 return res.render('takeouts/myTakeouts', {takeouts: allTakeouts})//res.send(allTakeouts)
             }
-        req.flash('success_msg', "You don't have any takeouts.")
-        res.redirect('/')
+        req.flash('success_msg', 'You do not have any takeouts to inspect.')
+        res.redirect('/categories')
         })
         .catch((err) => {
-            console.log('in catch block...')
             res.send(err)
         })
 })
 
-//Allows a user to inspect their currently being built takeout. If the newUserTakeout sesion array is empty, then redirect to the categories page so that they can build. If the search returns empty for some reason, also redirect to category.
+//Allows a user to inspect their currently being built takeout. If the newUserTakeout session array is empty, then redirect to the categories page so that they can build. If the search returns empty for some reason, also redirect to category.
 router.get('/takeouts/new_takeout', (req, res) => {
     if(!req.session.newUserTakeout){ 
         req.flash('success_msg', 'You currently do not have a takeout under construction.')
@@ -111,7 +109,7 @@ router.post('/takeouts/create_new_takeout', (req, res) => {
     }    
 })
 
-//route to retrieve a takeout with a token. TODO implement a response if a takeout is not found. Flash Message?
+//route to retrieve a takeout with a token. 
 router.get('/takeouts/retrieve_takeout', (req,res) => {
     Models.Takeout.findOne({
         where: {

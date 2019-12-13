@@ -3,9 +3,6 @@ module.exports = (sequelize, Datatypes) => {
         token: {
             type: Datatypes.STRING       
         },
-        takeoutAssets: {
-            type: Datatypes.ARRAY(Datatypes.TEXT)
-        },
         expiration: {
             type: Datatypes.DATE //on what date does this expire
         },

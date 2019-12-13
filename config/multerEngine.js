@@ -3,7 +3,7 @@ const mime = require('mime-types')  //converts stored mime type extensions from 
 const crypto = require('crypto')    //creates random string to store files
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, './public/uploads/')
+      cb(null, './assetstorage/')
     },
     filename: function (req, file, cb) {
       crypto.pseudoRandomBytes(16, function (err, raw) {
