@@ -4,6 +4,7 @@ const Models = require('../config/database')
 const auth = require('../config/authenticate')
 const multerEngine = require('../config/multerEngine')
 const mime = require('mime-types')
+const fs = require('fs')
 
 router.get('/categories/:category_id/products/:product_id/assets', (req, res) => {
     Models.Product.findOne({
@@ -18,7 +19,7 @@ router.get('/categories/:category_id/products/:product_id/assets', (req, res) =>
         ]
     })
     .then((results) => {
-        res.render('assets/allAssets', {results: results})
+        res.render('assets/allAssets', {results: results, user: req.user})
     })
     .catch((err) => res.send(err))
 })
@@ -84,14 +85,12 @@ router.post('/assets/addasset', multerEngine.single('asset'), (req, res, next) =
 })
 
 //list of all assets in system. page displays a download, view, edit, and delete table for each individual asset.
-router.get('/assets', (req, res) => {
+router.get('/admin_all_assets', auth.isAdmin, (req, res) => {
     Models.Asset.findAll({})
     .then((assets) => res.render('assets/adminAllAssets', {assets: assets}))
     .catch(err => res.send(err))
 })
 
-//TODO need to get productAsset table assocation so that products that the asset is associated with can be rendered in a table.
-//TODO: lots of DB queries here. Do a promise.all? OR is that no longer necessary with the new m:m association...?
 router.get('/assets/edit/:asset_id', (req, res) => {
     Models.Asset.findOne({
         where: {id: req.params.asset_id},
@@ -153,6 +152,29 @@ router.get('/assets/download/:asset_multer_name', (req, res) => {
     .then((asset) => {
         res.download("./assetstorage/"+asset.assetMulterName, asset.assetOriginalName)
     })
+})
+
+
+//Delete an asset db record, all product association records, and the file itself. 
+router.get('/assets/remove_asset/:asset_id', (req, res) => {
+    //first delete all productAsset associates
+    Models.ProductAsset.destroy({
+        where: {assetId: req.params.asset_id}
+    })
+    .then(() => {
+        Models.Asset.findOne({
+            where: {id: req.params.asset_id}
+        })
+        .then((asset) => {
+            asset.destroy()
+            //should this be made into middleware so that files can be deleted on s3 as well using a single method?
+            fs.unlink('./assetstorage/'+asset.assetMulterName, (err) => {
+                if (err) throw err
+            })
+        })
+    })
+
+    res.redirect('/admin_all_assets')
 })
 
 //asset.assetOriginalName
