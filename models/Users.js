@@ -44,7 +44,7 @@ module.exports = (sequelize, Datatypes) => {
                 defaultValue: false
             },
             emailVerificationHash: {
-                type: Datatypes.TEXT    //generated when a user first signs up with a crypto
+                type: Datatypes.STRING    //generated when a user first signs up with a crypto
             },
     })
 

@@ -167,7 +167,7 @@ router.get('/assets/remove_asset/:asset_id', (req, res) => {
         })
         .then((asset) => {
             asset.destroy()
-            //should this be made into middleware so that files can be deleted on s3 as well using a single method?
+            //TODO: should this be made into middleware so that files can be deleted on s3 as well using a single method?
             fs.unlink('./assetstorage/'+asset.assetMulterName, (err) => {
                 if (err) throw err
             })

@@ -4,13 +4,15 @@ if (process.env.NODE_ENV !== 'proudction'){
 }
 
 const express = require('express')
+const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const passport = require('passport')
 const session = require('express-session')
 const methodOverride = require('method-override')
 const path = require('path')
-const exphbs = require('express-handlebars')
+
 const flash = require('connect-flash')
+const nodemailer = require('nodemailer')
 
 //importing and invoking passport middleware passport
 require('./config/passport-config')(passport)
@@ -48,6 +50,24 @@ app.use((req, res, next) =>{
 //Passport Middleware
 app.use(passport.initialize())
 app.use(passport.session())
+
+
+//Nodemailer middleware
+let transporter = nodemailer.createTransport({
+    service: "SendGrid",
+    auth: {
+        user: process.env.NODEMAIL_USER,
+        pass: process.env.NODEMAIL_PASS
+    }
+})
+
+transporter.verify(function(error, success) {
+    if (error) {
+        console.log("NODEMAILER ERROR: " + error);
+    } else {
+        console.log("NODEMAILER: Server is ready to take our messages");
+    }
+});
 
 
 //Express Router files

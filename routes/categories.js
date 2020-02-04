@@ -6,7 +6,8 @@ const multerEngine = require('../config/multerEngine')
 
 router.get('/categories/', auth.isAuth, (req, res) => {
     Models.Category.findAll({})
-        .then((categories) => res.render('categories/allCategories', {categories: categories, user: req.user}))
+        //Map function is due to a breaking change in handlebars. When express-handlebars is able to incorporate a fix, this can be removed. 
+        .then((categories) => res.render('categories/allCategories', {categories: categories.map(categories => categories.toJSON()), user: req.user}))
         .catch((err) => {
             console.log(err)
             res.send(err)

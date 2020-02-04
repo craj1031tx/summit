@@ -49,9 +49,7 @@ router.post('/users/register', auth.alreadyAuth, async (req, res) => {
 
     try {
         //TODO need to add crypto function so that it properly embeds in database
-        const emailVerificationHashCrypto = crypto.pseudoRandomBytes(16, function (err, raw) {
-            return (raw.toString('hex'));
-          });
+        const emailVerificationHashCrypto = crypto.randomBytes(32).toString('hex');
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
         Models.User.create({
             email: req.body.email,
