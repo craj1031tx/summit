@@ -3,16 +3,17 @@ if (process.env.NODE_ENV !== 'proudction'){
     require('dotenv').config();
 }
 
-const express = require('express')
-const exphbs = require('express-handlebars')
+var express = require('express')
+var expressHandlebars = require('express-handlebars')
+var Handlebars = require('handlebars')
+var {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
 const bodyParser = require('body-parser')
 const passport = require('passport')
 const session = require('express-session')
 const methodOverride = require('method-override')
 const path = require('path')
-
 const flash = require('connect-flash')
-const nodemailer = require('nodemailer')
+
 
 //importing and invoking passport middleware passport
 require('./config/passport-config')(passport)
@@ -26,7 +27,10 @@ const db = require('./config/database')
 
 //express startup
 const app = express()
-app.engine('handlebars', exphbs( {defaultLayout: 'main'}));
+app.engine('handlebars', expressHandlebars({
+    defaultLayout: 'main',
+    handlebars: allowInsecurePrototypeAccess(Handlebars)
+}));
 app.set('view engine', 'handlebars')
 app.use(express.static(path.join(__dirname, "public")))
 app.use(bodyParser.urlencoded({extended: false}))
@@ -51,23 +55,6 @@ app.use((req, res, next) =>{
 app.use(passport.initialize())
 app.use(passport.session())
 
-
-//Nodemailer middleware
-let transporter = nodemailer.createTransport({
-    service: "SendGrid",
-    auth: {
-        user: process.env.NODEMAIL_USER,
-        pass: process.env.NODEMAIL_PASS
-    }
-})
-
-transporter.verify(function(error, success) {
-    if (error) {
-        console.log("NODEMAILER ERROR: " + error);
-    } else {
-        console.log("NODEMAILER: Server is ready to take our messages");
-    }
-});
 
 
 //Express Router files

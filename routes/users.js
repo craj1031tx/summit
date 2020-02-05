@@ -5,6 +5,7 @@ const auth = require('../config/authenticate')
 const bcrypt = require('bcrypt')
 const Models = require('../config/database')
 const crypto = require('crypto')
+const mailer = require('../config/nodemailer')
 
 //since the app.js app.use function is already pointing to /users, all routes below will assume url/users is prepended.
 //this route is currently set up for testing and does not have any authentication
@@ -60,7 +61,19 @@ router.post('/users/register', auth.alreadyAuth, async (req, res) => {
         })
         .then((newUser) => {
             console.log("here is the new user: " + JSON.stringify(newUser, null, 4)) //remove console.log for production
-            req.flash('success_msg', 'You are now registered and may login')
+            req.flash('success_msg', 'You are now registered, please check your email address to verify you account.')
+
+            //nodemailer message configuration to send user a verification email
+            let nodemailerMessage = {
+                from: 'Samsung Summit <noreply@samsungsummit.com>', //change this email to production email
+                to: 'craj1031tx@gmail.com',  //change this to newUser.email
+                subject: 'Please verify your email address for Samsung Summit',
+                text: 'Please navigate to localhost:3000/users/verification/'+newUser.emailVerificationHash,
+                html: `<p>Please navigate to <a>https://localhost:3000/users/verification/${newUser.emailVerificationHash}</a> to verify your Samsung Summit account</p>`
+            }
+
+            mailer.sendMail(nodemailerMessage)
+
             res.redirect('/users/login')}
         )
         .catch((valError) => {
@@ -77,6 +90,43 @@ router.post('/users/register', auth.alreadyAuth, async (req, res) => {
 router.delete('/users/logout', (req, res) => {  //TODO determine if auth.isAuth should be added to this logout DELETE route
     req.logOut()
     res.redirect('/users/login')
+})
+
+
+router.get('/users/testroute', (req, res) => {
+    // let nodemailerMessage = {
+    //     from: 'Samsung Summit <noreply@samsungsummit.com>', //change this email to production email
+    //     to: 'craj1031tx@gmail.com',
+    //     subject: 'Please verify your email address for Samsung Summit',
+    //     text: 'Please navigate to localhost:3000/users/verification/'+"thisisarandomhash"
+    // }
+
+    // mailer.sendMail(nodemailerMessage)
+    // res.sendStatus(200)
+})
+
+router.get('/users/verification/:url_email_hash', (req, res) => {
+    Models.User.findOne({
+        where: { 
+            emailVerificationHash: req.params.url_email_hash
+        }
+    })
+    .then((user) => {
+        if(user){
+            if(user.emailVerified){
+                return res.redirect('/')
+            }           
+            user.emailVerified = true;
+            user.save()
+            .then(() => {
+                req.flash('success_msg', 'Your account has been verified, you may now login')
+                return res.redirect('/users/login')
+            })            
+        } else {
+            return res.redirect('/')
+        }        
+    })
+    .catch((err) => console.log(err))
 })
 
 
